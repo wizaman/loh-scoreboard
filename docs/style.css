@@ -47,12 +47,40 @@ h1 {
     margin: 0 0 10px 0;
 }
 
-.total-score-details {
+#total-score-details-container {
     display: flex;
-    justify-content: center;
-    gap: 30px;
-    font-size: 1.4em;
+    flex-direction: column; /* Stack trainers vertically */
+    align-items: center; /* Center items */
+    gap: 10px; /* Space between trainers */
+    font-size: 1.2em;
     font-weight: bold;
+}
+
+.score-entry {
+    display: flex;
+    align-items: baseline; /* Align items nicely */
+    gap: 15px; /* Add some gap */
+    width: 80%;
+    max-width: 400px;
+    padding: 8px 15px; /* A bit more padding */
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.score-entry .rank {
+    color: #6c757d; /* A neutral color */
+    min-width: 20px; /* Ensure alignment */
+    text-align: right;
+}
+
+.score-entry .trainer-name {
+    color: #0056b3;
+    flex-grow: 1; /* Allow name to take up space */
+}
+
+.score-entry .trainer-score {
+    color: #d9534f;
 }
 
 .race-wrapper {

@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const racesContainer = document.getElementById('races-container');
     const addRaceBtn = document.getElementById('add-race-btn');
+    const totalScoreContainer = document.getElementById('total-score-details-container');
     let raceCounter = 0;
 
     // スコア計算関数
@@ -14,32 +15,58 @@ document.addEventListener('DOMContentLoaded', () => {
         return 0;
     }
 
+    // 総合スコア表示を更新
+    function updateTotalScores(scores) {
+        totalScoreContainer.innerHTML = ''; // Clear previous scores
+
+        // Sort trainers by score descending
+        const sortedTrainers = Object.entries(scores).sort(([, a], [, b]) => b - a);
+
+        if (sortedTrainers.length === 0) {
+            totalScoreContainer.innerHTML = '<p>トレーナー名を入力して着順を選択してください</p>';
+            return;
+        }
+
+        sortedTrainers.forEach(([name, score], index) => {
+            const scoreEntry = document.createElement('div');
+            scoreEntry.classList.add('score-entry');
+            scoreEntry.innerHTML = `
+                <span class="rank">${index + 1}.</span>
+                <span class="trainer-name">${name}</span>
+                <span class="trainer-score">${score}点</span>
+            `;
+            totalScoreContainer.appendChild(scoreEntry);
+        });
+    }
+
     // レース全体のHTMLを生成
     function createRaceElement(raceNum) {
         const raceDiv = document.createElement('div');
         raceDiv.classList.add('race-wrapper');
-        raceDiv.dataset.raceNum = raceNum; // Store race number in a data attribute
+        raceDiv.dataset.raceNum = raceNum;
         raceDiv.innerHTML = `
             <div class="race-number">${raceNum}R</div>
             <div class="race-container">
-                <div class="trainer-section" id="race${raceNum}-trainer1-section">
+                <div class="trainer-section" data-trainer-id="1">
                     <div class="trainer-header">
-                        <h2>トレーナー1</h2>
-                        <input type="text" id="race${raceNum}-trainer1Name" value="トレーナーA">
-                        <p>スコア: <span id="race${raceNum}-trainer1Score">0</span>点</p>
+                        <input type="text" class="trainer-name-input" placeholder="トレーナー名">
+                        <p>スコア: <span class="race-score">0</span>点</p>
                     </div>
                     <div class="uma-ranks-container"></div>
                 </div>
-                <div class="trainer-section" id="race${raceNum}-trainer2-section">
+                <div class="trainer-section" data-trainer-id="2">
                     <div class="trainer-header">
-                        <h2>トレーナー2</h2>
-                        <input type="text" id="race${raceNum}-trainer2Name" value="トレーナーB">
-                        <p>スコア: <span id="race${raceNum}-trainer2Score">0</span>点</p>
+                        <input type="text" class="trainer-name-input" placeholder="トレーナー名">
+                        <p>スコア: <span class="race-score">0</span>点</p>
                     </div>
                     <div class="uma-ranks-container"></div>
                 </div>
             </div>
         `;
+        // Add event listeners to trainer name inputs
+        raceDiv.querySelectorAll('.trainer-name-input').forEach(input => {
+            input.addEventListener('input', performCalculation);
+        });
         return raceDiv;
     }
 
@@ -48,15 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 1; i <= 3; i++) {
             const group = document.createElement('div');
             group.classList.add('uma-rank-group');
-
-            const label = document.createElement('label');
-            label.textContent = `ウマ娘${i}:`;
-            group.appendChild(label);
+            group.innerHTML = `<label>ウマ娘${i}:</label>`;
 
             const nameInput = document.createElement('input');
             nameInput.type = 'text';
             nameInput.classList.add('uma-name');
-            nameInput.id = `r${raceNum}t${trainerNum}u${i}Name`;
             nameInput.placeholder = 'ウマ娘名';
             group.appendChild(nameInput);
 
@@ -90,59 +113,45 @@ document.addEventListener('DOMContentLoaded', () => {
         const raceEl = createRaceElement(raceCounter);
         racesContainer.appendChild(raceEl);
 
-        const trainer1UmaContainer = raceEl.querySelector(`#race${raceCounter}-trainer1-section .uma-ranks-container`);
-        const trainer2UmaContainer = raceEl.querySelector(`#race${raceCounter}-trainer2-section .uma-ranks-container`);
-
+        const [trainer1UmaContainer, trainer2UmaContainer] = raceEl.querySelectorAll('.uma-ranks-container');
         createUmaInputs(raceCounter, 1, trainer1UmaContainer);
         createUmaInputs(raceCounter, 2, trainer2UmaContainer);
         
-        performCalculation(); // Recalculate everything
+        performCalculation();
     }
 
     // 全体の計算処理
     function performCalculation() {
-        let totalTrainer1Score = 0;
-        let totalTrainer2Score = 0;
+        const aggregatedScores = {};
 
-        const raceWrappers = document.querySelectorAll('.race-wrapper');
-        raceWrappers.forEach(raceWrapper => {
+        document.querySelectorAll('.race-wrapper').forEach(raceWrapper => {
             const raceNum = raceWrapper.dataset.raceNum;
-            let raceTrainer1Score = 0;
-            let raceTrainer2Score = 0;
-
-            // Trainer 1
-            for (let u = 1; u <= 3; u++) {
-                const selectedRadio = document.querySelector(`input[name="race${raceNum}trainer1Uma${u}"]:checked`);
-                if (selectedRadio) {
-                    raceTrainer1Score += calculateScore(parseInt(selectedRadio.value));
+            
+            raceWrapper.querySelectorAll('.trainer-section').forEach(trainerSection => {
+                const trainerId = trainerSection.dataset.trainerId;
+                const trainerNameInput = trainerSection.querySelector('.trainer-name-input');
+                const trainerName = trainerNameInput.value.trim();
+                
+                let raceScore = 0;
+                for (let u = 1; u <= 3; u++) {
+                    const selectedRadio = document.querySelector(`input[name="race${raceNum}trainer${trainerId}Uma${u}"]:checked`);
+                    if (selectedRadio) {
+                        raceScore += calculateScore(parseInt(selectedRadio.value));
+                    }
                 }
-            }
+                
+                trainerSection.querySelector('.race-score').textContent = raceScore;
 
-            // Trainer 2
-            for (let u = 1; u <= 3; u++) {
-                const selectedRadio = document.querySelector(`input[name="race${raceNum}trainer2Uma${u}"]:checked`);
-                if (selectedRadio) {
-                    raceTrainer2Score += calculateScore(parseInt(selectedRadio.value));
+                if (trainerName) {
+                    if (!aggregatedScores[trainerName]) {
+                        aggregatedScores[trainerName] = 0;
+                    }
+                    aggregatedScores[trainerName] += raceScore;
                 }
-            }
-
-            const trainer1ScoreEl = document.getElementById(`race${raceNum}-trainer1Score`);
-            if(trainer1ScoreEl) {
-                trainer1ScoreEl.textContent = raceTrainer1Score;
-            }
-
-            const trainer2ScoreEl = document.getElementById(`race${raceNum}-trainer2Score`);
-            if(trainer2ScoreEl) {
-                trainer2ScoreEl.textContent = raceTrainer2Score;
-            }
-
-
-            totalTrainer1Score += raceTrainer1Score;
-            totalTrainer2Score += raceTrainer2Score;
+            });
         });
 
-        document.getElementById('trainer1TotalScore').textContent = totalTrainer1Score;
-        document.getElementById('trainer2TotalScore').textContent = totalTrainer2Score;
+        updateTotalScores(aggregatedScores);
     }
 
     // イベントリスナーを設定
@@ -150,7 +159,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 初期状態で1レース表示
     addRace();
-    
-    // 初期計算
-    performCalculation();
 });
