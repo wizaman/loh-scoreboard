@@ -26,7 +26,7 @@ h1 {
 
 input[type="text"] {
     padding: 8px;
-    margin-bottom: 15px;
+    margin-bottom: 0; /* Adjusted for alignment */
     border: 1px solid #ccc;
     border-radius: 4px;
 }
@@ -39,13 +39,14 @@ input[type="text"] {
 
 .uma-rank-group {
     display: flex;
+    flex-direction: row;
     align-items: center;
     gap: 10px;
 }
 
 .uma-rank-group label {
     font-weight: bold;
-    min-width: 60px;
+    min-width: 20px;
 }
 
 .rank-radio-buttons {
@@ -59,13 +60,15 @@ input[type="text"] {
 }
 
 .rank-radio-buttons label {
-    padding: 8px 12px;
+    padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
     cursor: pointer;
     background-color: #f9f9f9;
     transition: background-color 0.3s, color 0.3s;
     font-weight: normal;
+    width: 24px; /* Set a fixed width */
+    text-align: center; /* Center the text */
 }
 
 .rank-radio-buttons input[type="radio"]:checked + label {
@@ -78,4 +81,10 @@ input[type="text"] {
     font-weight: bold;
     color: #d9534f;
     font-size: 1.2em;
+    margin-top: 15px;
+    display: inline-block;
+}
+
+.uma-name {
+    width: 150px; /* Adjust width as needed */
 }

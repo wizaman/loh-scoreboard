@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const playerSections = document.querySelectorAll('.player-section');
+    const nameInputs = document.querySelectorAll('input[type="text"].uma-name');
 
     // スコア計算関数
     function calculateScore(rank) {
