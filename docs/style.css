@@ -1,6 +1,8 @@
 body {
     font-family: sans-serif;
-    margin: 20px;
+    margin: 20px auto; /* Centering body */
+    max-width: 1700px; /* Max width for the body */
+    padding: 0 20px; /* Add some padding */
     background-color: #f4f4f4;
     color: #333;
 }
