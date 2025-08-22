@@ -34,6 +34,26 @@ h1 {
     background-color: #218838;
 }
 
+.header-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+#copy-json-btn {
+    padding: 10px 15px;
+    font-size: 1em;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#copy-json-btn:hover {
+    background-color: #0056b3;
+}
+
 
 .total-scores {
     background-color: #e9ecef;

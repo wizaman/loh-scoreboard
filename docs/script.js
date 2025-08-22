@@ -1,10 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- DOM Elements ---
     const racesContainer = document.getElementById('races-container');
     const addRaceBtn = document.getElementById('add-race-btn');
+    const copyJsonBtn = document.getElementById('copy-json-btn');
     const totalScoreContainer = document.getElementById('total-score-details-container');
-    let raceCounter = 0;
 
-    // スコア計算関数
+    // --- State ---
+    let raceCounter = 0;
+    const LOCAL_STORAGE_KEY = 'lohScoreboardState';
+
+    // --- Core Functions ---
+
     function calculateScore(rank) {
         if (rank === 1) return 100;
         if (rank === 2) return 60;
@@ -15,11 +21,38 @@ document.addEventListener('DOMContentLoaded', () => {
         return 0;
     }
 
-    // 総合スコア表示を更新
-    function updateTotalScores(scores) {
-        totalScoreContainer.innerHTML = ''; // Clear previous scores
+    function performCalculationAndSave() {
+        const aggregatedScores = {};
 
-        // Sort trainers by score descending
+        document.querySelectorAll('.race-wrapper').forEach(raceWrapper => {
+            raceWrapper.querySelectorAll('.trainer-section').forEach(trainerSection => {
+                const trainerNameInput = trainerSection.querySelector('.trainer-name-input');
+                const trainerName = trainerNameInput.value.trim();
+                
+                let raceScore = 0;
+                trainerSection.querySelectorAll('.uma-rank-group').forEach((group, index) => {
+                    const selectedRadio = group.querySelector('input[type="radio"]:checked');
+                    if (selectedRadio) {
+                        raceScore += calculateScore(parseInt(selectedRadio.value));
+                    }
+                });
+                
+                trainerSection.querySelector('.race-score').textContent = raceScore;
+
+                if (trainerName) {
+                    aggregatedScores[trainerName] = (aggregatedScores[trainerName] || 0) + raceScore;
+                }
+            });
+        });
+
+        updateTotalScores(aggregatedScores);
+        saveState();
+    }
+
+    // --- UI Update Functions ---
+
+    function updateTotalScores(scores) {
+        totalScoreContainer.innerHTML = '';
         const sortedTrainers = Object.entries(scores).sort(([, a], [, b]) => b - a);
 
         if (sortedTrainers.length === 0) {
@@ -39,7 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // レース全体のHTMLを生成
+    // --- DOM Creation Functions ---
+
     function createRaceElement(raceNum) {
         const raceDiv = document.createElement('div');
         raceDiv.classList.add('race-wrapper');
@@ -63,29 +97,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
         `;
-        // Add event listeners to trainer name inputs
         raceDiv.querySelectorAll('.trainer-name-input').forEach(input => {
-            input.addEventListener('input', performCalculation);
+            input.addEventListener('input', performCalculationAndSave);
         });
         return raceDiv;
     }
 
-    // ウマ娘の入力欄を生成
     function createUmaInputs(raceNum, trainerNum, container) {
         for (let i = 1; i <= 3; i++) {
             const group = document.createElement('div');
             group.classList.add('uma-rank-group');
             group.innerHTML = `<label>ウマ娘${i}:</label>`;
-
+            
             const nameInput = document.createElement('input');
             nameInput.type = 'text';
             nameInput.classList.add('uma-name');
             nameInput.placeholder = 'ウマ娘名';
+            nameInput.addEventListener('input', saveState);
             group.appendChild(nameInput);
 
             const rankContainer = document.createElement('div');
             rankContainer.classList.add('rank-radio-buttons');
-
             for (let rank = 1; rank <= 12; rank++) {
                 const radioId = `r${raceNum}t${trainerNum}u${i}r${rank}`;
                 const radio = document.createElement('input');
@@ -93,13 +125,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 radio.id = radioId;
                 radio.name = `race${raceNum}trainer${trainerNum}Uma${i}`;
                 radio.value = rank;
-                radio.addEventListener('change', performCalculation);
+                radio.addEventListener('change', performCalculationAndSave);
+                rankContainer.appendChild(radio);
 
                 const radioLabel = document.createElement('label');
                 radioLabel.htmlFor = radioId;
                 radioLabel.textContent = rank;
-
-                rankContainer.appendChild(radio);
                 rankContainer.appendChild(radioLabel);
             }
             group.appendChild(rankContainer);
@@ -107,56 +138,109 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 新しいレースを追加する関数
     function addRace() {
         raceCounter++;
         const raceEl = createRaceElement(raceCounter);
         racesContainer.appendChild(raceEl);
 
-        const [trainer1UmaContainer, trainer2UmaContainer] = raceEl.querySelectorAll('.uma-ranks-container');
-        createUmaInputs(raceCounter, 1, trainer1UmaContainer);
-        createUmaInputs(raceCounter, 2, trainer2UmaContainer);
+        const [t1Container, t2Container] = raceEl.querySelectorAll('.uma-ranks-container');
+        createUmaInputs(raceCounter, 1, t1Container);
+        createUmaInputs(raceCounter, 2, t2Container);
         
-        performCalculation();
+        performCalculationAndSave();
     }
 
-    // 全体の計算処理
-    function performCalculation() {
-        const aggregatedScores = {};
+    // --- State Management ---
 
+    function getStateAsObject() {
+        const races = [];
         document.querySelectorAll('.race-wrapper').forEach(raceWrapper => {
-            const raceNum = raceWrapper.dataset.raceNum;
-            
+            const raceData = { trainers: [] };
             raceWrapper.querySelectorAll('.trainer-section').forEach(trainerSection => {
-                const trainerId = trainerSection.dataset.trainerId;
-                const trainerNameInput = trainerSection.querySelector('.trainer-name-input');
-                const trainerName = trainerNameInput.value.trim();
-                
-                let raceScore = 0;
-                for (let u = 1; u <= 3; u++) {
-                    const selectedRadio = document.querySelector(`input[name="race${raceNum}trainer${trainerId}Uma${u}"]:checked`);
-                    if (selectedRadio) {
-                        raceScore += calculateScore(parseInt(selectedRadio.value));
-                    }
-                }
-                
-                trainerSection.querySelector('.race-score').textContent = raceScore;
-
-                if (trainerName) {
-                    if (!aggregatedScores[trainerName]) {
-                        aggregatedScores[trainerName] = 0;
-                    }
-                    aggregatedScores[trainerName] += raceScore;
-                }
+                const trainerData = { uma: [] };
+                trainerData.name = trainerSection.querySelector('.trainer-name-input').value;
+                trainerSection.querySelectorAll('.uma-rank-group').forEach(group => {
+                    const umaName = group.querySelector('.uma-name').value;
+                    const checkedRank = group.querySelector('input[type="radio"]:checked');
+                    trainerData.uma.push({
+                        name: umaName,
+                        rank: checkedRank ? parseInt(checkedRank.value) : null
+                    });
+                });
+                raceData.trainers.push(trainerData);
             });
+            races.push(raceData);
+        });
+        return { races };
+    }
+
+    function saveState() {
+        const state = getStateAsObject();
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function loadState(state) {
+        racesContainer.innerHTML = '';
+        raceCounter = 0;
+        state.races.forEach(() => {
+            raceCounter++;
+            const raceEl = createRaceElement(raceCounter);
+            racesContainer.appendChild(raceEl);
+            const [t1Container, t2Container] = raceEl.querySelectorAll('.uma-ranks-container');
+            createUmaInputs(raceCounter, 1, t1Container);
+            createUmaInputs(raceCounter, 2, t2Container);
         });
 
-        updateTotalScores(aggregatedScores);
+        document.querySelectorAll('.race-wrapper').forEach((raceWrapper, raceIndex) => {
+            const raceData = state.races[raceIndex];
+            raceWrapper.querySelectorAll('.trainer-section').forEach((trainerSection, trainerIndex) => {
+                const trainerData = raceData.trainers[trainerIndex];
+                trainerSection.querySelector('.trainer-name-input').value = trainerData.name;
+                trainerSection.querySelectorAll('.uma-rank-group').forEach((group, umaIndex) => {
+                    const umaData = trainerData.uma[umaIndex];
+                    group.querySelector('.uma-name').value = umaData.name;
+                    if (umaData.rank) {
+                        const rankRadio = group.querySelector(`input[value="${umaData.rank}"]`);
+                        if (rankRadio) rankRadio.checked = true;
+                    }
+                });
+            });
+        });
+        performCalculationAndSave();
     }
 
-    // イベントリスナーを設定
-    addRaceBtn.addEventListener('click', addRace);
+    function loadStateFromLocalStorage() {
+        const savedState = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (savedState) {
+            try {
+                loadState(JSON.parse(savedState));
+            } catch (e) {
+                console.error("Failed to parse or load state:", e);
+                addRace(); // Start fresh if state is corrupted
+            }
+        } else {
+            addRace();
+        }
+    }
 
-    // 初期状態で1レース表示
-    addRace();
+    // --- Event Handlers ---
+
+    function copyStateToClipboard() {
+        const state = getStateAsObject();
+        const jsonString = JSON.stringify(state, null, 2); // Pretty print JSON
+        navigator.clipboard.writeText(jsonString).then(() => {
+            const originalText = copyJsonBtn.textContent;
+            copyJsonBtn.textContent = 'Copied!';
+            setTimeout(() => { copyJsonBtn.textContent = originalText; }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy JSON', err);
+            alert('JSONのコピーに失敗しました。');
+        });
+    }
+
+    // --- Initialization ---
+    addRaceBtn.addEventListener('click', addRace);
+    copyJsonBtn.addEventListener('click', copyStateToClipboard);
+
+    loadStateFromLocalStorage();
 });
