@@ -10,13 +10,55 @@ h1 {
     text-align: center;
 }
 
+.total-scores {
+    background-color: #e9ecef;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.total-scores h2 {
+    margin: 0 0 10px 0;
+}
+
+.total-score-details {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+.race-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.race-number {
+    background-color: #6c757d;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.race-container {
+    display: flex;
+    gap: 20px;
+    flex-grow: 1;
+}
+
 .trainer-section {
     background-color: #fff;
     border: 1px solid #ddd;
     padding: 20px;
-    margin-bottom: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    flex: 1;
 }
 
 .trainer-header {

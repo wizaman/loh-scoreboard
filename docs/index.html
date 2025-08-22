@@ -9,49 +9,15 @@
 <body>
     <h1>ウマ娘 リーグオブヒーローズ スコア計算</h1>
 
-    <div class="trainer-section">
-        <div class="trainer-header">
-            <h2>トレーナー1</h2>
-            <input type="text" id="trainer1Name" value="トレーナーA">
-            <p>スコア: <span id="trainer1Score">0</span>点</p>
-        </div>
-        <div class="uma-ranks-container">
-            <div class="uma-rank-group">
-                <label>ウマ娘1:</label>
-                <input type="text" class="uma-name" id="trainer1Uma1Name" placeholder="ウマ娘名">
-            </div>
-            <div class="uma-rank-group">
-                <label>ウマ娘2:</label>
-                <input type="text" class="uma-name" id="trainer1Uma2Name" placeholder="ウマ娘名">
-            </div>
-            <div class="uma-rank-group">
-                <label>ウマ娘3:</label>
-                <input type="text" class="uma-name" id="trainer1Uma3Name" placeholder="ウマ娘名">
-            </div>
+    <div class="total-scores">
+        <h2>総合スコア</h2>
+        <div class="total-score-details">
+            <p>トレーナーA: <span id="trainer1TotalScore">0</span>点</p>
+            <p>トレーナーB: <span id="trainer2TotalScore">0</span>点</p>
         </div>
     </div>
 
-    <div class="trainer-section">
-        <div class="trainer-header">
-            <h2>トレーナー2</h2>
-            <input type="text" id="trainer2Name" value="トレーナーB">
-            <p>スコア: <span id="trainer2Score">0</span>点</p>
-        </div>
-        <div class="uma-ranks-container">
-            <div class="uma-rank-group">
-                <label>ウマ娘1:</label>
-                <input type="text" class="uma-name" id="trainer2Uma1Name" placeholder="ウマ娘名">
-            </div>
-            <div class="uma-rank-group">
-                <label>ウマ娘2:</label>
-                <input type="text" class="uma-name" id="trainer2Uma2Name" placeholder="ウマ娘名">
-            </div>
-            <div class="uma-rank-group">
-                <label>ウマ娘3:</label>
-                <input type="text" class="uma-name" id="trainer2Uma3Name" placeholder="ウマ娘名">
-            </div>
-        </div>
-    </div>
+    <div id="races-container"></div>
 
     <script src="script.js"></script>
 </body>

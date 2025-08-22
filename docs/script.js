@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const trainerSections = document.querySelectorAll('.trainer-section');
-    const nameInputs = document.querySelectorAll('input[type="text"].uma-name');
+    const racesContainer = document.getElementById('races-container');
+    const NUM_RACES = 5;
 
     // スコア計算関数
     function calculateScore(rank) {
@@ -10,56 +10,124 @@ document.addEventListener('DOMContentLoaded', () => {
         if (rank === 4) return 30;
         if (rank === 5) return 20;
         if (rank >= 6 && rank <= 12) return 10;
-        return 0; // 無効な着順の場合
+        return 0;
     }
 
-    // トレーナーごとのラジオボタンを生成し、イベントリスナーを設定
-    trainerSections.forEach((section, trainerIndex) => {
-        const trainerNumber = trainerIndex + 1;
-        const umaRankGroups = section.querySelectorAll('.uma-rank-group');
+    // レース全体のHTMLを生成
+    function createRaceElement(raceNum) {
+        const raceDiv = document.createElement('div');
+        raceDiv.classList.add('race-wrapper');
+        raceDiv.innerHTML = `
+            <div class="race-number">${raceNum}R</div>
+            <div class="race-container">
+                <div class="trainer-section" id="race${raceNum}-trainer1-section">
+                    <div class="trainer-header">
+                        <h2>トレーナー1</h2>
+                        <input type="text" id="race${raceNum}-trainer1Name" value="トレーナーA">
+                        <p>スコア: <span id="race${raceNum}-trainer1Score">0</span>点</p>
+                    </div>
+                    <div class="uma-ranks-container"></div>
+                </div>
+                <div class="trainer-section" id="race${raceNum}-trainer2-section">
+                    <div class="trainer-header">
+                        <h2>トレーナー2</h2>
+                        <input type="text" id="race${raceNum}-trainer2Name" value="トレーナーB">
+                        <p>スコア: <span id="race${raceNum}-trainer2Score">0</span>点</p>
+                    </div>
+                    <div class="uma-ranks-container"></div>
+                </div>
+            </div>
+        `;
+        return raceDiv;
+    }
 
-        umaRankGroups.forEach((group, umaIndex) => {
-            const umaNumber = umaIndex + 1;
+    // ウマ娘の入力欄を生成
+    function createUmaInputs(raceNum, trainerNum, container) {
+        for (let i = 1; i <= 3; i++) {
+            const group = document.createElement('div');
+            group.classList.add('uma-rank-group');
+
+            const label = document.createElement('label');
+            label.textContent = `ウマ娘${i}:`;
+            group.appendChild(label);
+
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.classList.add('uma-name');
+            nameInput.id = `r${raceNum}t${trainerNum}u${i}Name`;
+            nameInput.placeholder = 'ウマ娘名';
+            group.appendChild(nameInput);
+
             const rankContainer = document.createElement('div');
             rankContainer.classList.add('rank-radio-buttons');
 
             for (let rank = 1; rank <= 12; rank++) {
-                const radioId = `t${trainerNumber}u${umaNumber}r${rank}`;
+                const radioId = `r${raceNum}t${trainerNum}u${i}r${rank}`;
                 const radio = document.createElement('input');
                 radio.type = 'radio';
                 radio.id = radioId;
-                radio.name = `trainer${trainerNumber}Uma${umaNumber}`;
+                radio.name = `race${raceNum}trainer${trainerNum}Uma${i}`;
                 radio.value = rank;
                 radio.addEventListener('change', performCalculation);
 
-                const label = document.createElement('label');
-                label.htmlFor = radioId;
-                label.textContent = rank;
+                const radioLabel = document.createElement('label');
+                radioLabel.htmlFor = radioId;
+                radioLabel.textContent = rank;
 
                 rankContainer.appendChild(radio);
-                rankContainer.appendChild(label);
+                rankContainer.appendChild(radioLabel);
             }
             group.appendChild(rankContainer);
-        });
-    });
+            container.appendChild(group);
+        }
+    }
+
+    // アプリケーションを初期化
+    for (let i = 1; i <= NUM_RACES; i++) {
+        const raceEl = createRaceElement(i);
+        racesContainer.appendChild(raceEl);
+
+        const trainer1UmaContainer = raceEl.querySelector('#race' + i + '-trainer1-section .uma-ranks-container');
+        const trainer2UmaContainer = raceEl.querySelector('#race' + i + '-trainer2-section .uma-ranks-container');
+
+        createUmaInputs(i, 1, trainer1UmaContainer);
+        createUmaInputs(i, 2, trainer2UmaContainer);
+    }
 
     // 全体の計算処理
     function performCalculation() {
-        trainerSections.forEach((section, trainerIndex) => {
-            const trainerNumber = trainerIndex + 1;
-            let totalScore = 0;
-            const umaRankGroups = section.querySelectorAll('.uma-rank-group');
+        let totalTrainer1Score = 0;
+        let totalTrainer2Score = 0;
 
-            umaRankGroups.forEach((group, umaIndex) => {
-                const umaNumber = umaIndex + 1;
-                const selectedRadio = document.querySelector(`input[name="trainer${trainerNumber}Uma${umaNumber}"]:checked`);
+        for (let i = 1; i <= NUM_RACES; i++) {
+            let raceTrainer1Score = 0;
+            let raceTrainer2Score = 0;
+
+            // Trainer 1
+            for (let u = 1; u <= 3; u++) {
+                const selectedRadio = document.querySelector(`input[name="race${i}trainer1Uma${u}"]:checked`);
                 if (selectedRadio) {
-                    totalScore += calculateScore(parseInt(selectedRadio.value));
+                    raceTrainer1Score += calculateScore(parseInt(selectedRadio.value));
                 }
-            });
+            }
 
-            document.getElementById(`trainer${trainerNumber}Score`).textContent = totalScore;
-        });
+            // Trainer 2
+            for (let u = 1; u <= 3; u++) {
+                const selectedRadio = document.querySelector(`input[name="race${i}trainer2Uma${u}"]:checked`);
+                if (selectedRadio) {
+                    raceTrainer2Score += calculateScore(parseInt(selectedRadio.value));
+                }
+            }
+
+            document.getElementById(`race${i}-trainer1Score`).textContent = raceTrainer1Score;
+            document.getElementById(`race${i}-trainer2Score`).textContent = raceTrainer2Score;
+
+            totalTrainer1Score += raceTrainer1Score;
+            totalTrainer2Score += raceTrainer2Score;
+        }
+
+        document.getElementById('trainer1TotalScore').textContent = totalTrainer1Score;
+        document.getElementById('trainer2TotalScore').textContent = totalTrainer2Score;
     }
 
     // 初期表示時に一度計算を実行
