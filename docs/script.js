@@ -26,24 +26,74 @@ document.addEventListener('DOMContentLoaded', () => {
         const aggregatedScores = {};
 
         document.querySelectorAll('.race-wrapper').forEach(raceWrapper => {
-            raceWrapper.querySelectorAll('.trainer-section').forEach(trainerSection => {
+            const allRanksInRace = [];
+            const rankElementsInRace = []; // To store references to radio button labels for highlighting
+
+            // Clear previous errors for this race
+            raceWrapper.querySelectorAll('.tie-error-message').forEach(el => el.textContent = '');
+            raceWrapper.querySelectorAll('.rank-radio-buttons label').forEach(label => {
+                label.classList.remove('error-rank');
+            });
+
+            const trainerSections = raceWrapper.querySelectorAll('.trainer-section');
+            const trainerRankData = new Map(); // Map to store ranks selected by each trainer
+
+            trainerSections.forEach(trainerSection => {
                 const trainerNameInput = trainerSection.querySelector('.trainer-name-input');
                 const trainerName = trainerNameInput.value.trim();
                 
                 let raceScore = 0;
+                const currentTrainerRanks = []; // Ranks selected by the current trainer
                 trainerSection.querySelectorAll('.uma-rank-group').forEach((group, index) => {
                     const selectedRadio = group.querySelector('input[type="radio"]:checked');
                     if (selectedRadio) {
-                        raceScore += calculateScore(parseInt(selectedRadio.value));
+                        const rank = parseInt(selectedRadio.value);
+                        allRanksInRace.push(rank);
+                        currentTrainerRanks.push(rank);
+                        rankElementsInRace.push({
+                            rank: rank,
+                            label: group.querySelector(`label[for="${selectedRadio.id}"]`),
+                            trainerSection: trainerSection // Store reference to trainer section
+                        });
+                        raceScore += calculateScore(rank);
                     }
                 });
-                
+                trainerRankData.set(trainerSection, currentTrainerRanks); // Store trainer's ranks
+
                 trainerSection.querySelector('.race-score').textContent = raceScore;
 
                 if (trainerName) {
                     aggregatedScores[trainerName] = (aggregatedScores[trainerName] || 0) + raceScore;
                 }
             });
+
+            // Check for ties across all Uma Musume in the current race
+            const seenRanks = new Set();
+            const tiedRanks = new Set();
+            allRanksInRace.forEach(rank => {
+                if (seenRanks.has(rank)) {
+                    tiedRanks.add(rank);
+                }
+                seenRanks.add(rank);
+            });
+
+            if (tiedRanks.size > 0) {
+                // Highlight tied ranks
+                rankElementsInRace.forEach(item => {
+                    if (tiedRanks.has(item.rank)) {
+                        item.label.classList.add('error-rank');
+                    }
+                });
+
+                // Display error message only for affected trainers
+                trainerSections.forEach(trainerSection => {
+                    const trainerRanks = trainerRankData.get(trainerSection);
+                    const hasTieForTrainer = trainerRanks.some(rank => tiedRanks.has(rank));
+                    if (hasTieForTrainer) {
+                        trainerSection.querySelector('.tie-error-message').textContent = '同着入力エラー！';
+                    }
+                });
+            }
         });
 
         updateTotalScores(aggregatedScores);
@@ -85,14 +135,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="trainer-section" data-trainer-id="1">
                     <div class="trainer-header">
                         <input type="text" class="trainer-name-input" placeholder="トレーナー名">
-                        <p>スコア: <span class="race-score">0</span>点</p>
+                        <p>スコア: <span class="race-score">0</span>点 <span class="tie-error-message" style="color: red; font-size: 0.8em;"></span></p>
                     </div>
                     <div class="uma-ranks-container"></div>
                 </div>
                 <div class="trainer-section" data-trainer-id="2">
                     <div class="trainer-header">
                         <input type="text" class="trainer-name-input" placeholder="トレーナー名">
-                        <p>スコア: <span class="race-score">0</span>点</p>
+                        <p>スコア: <span class="race-score">0</span>点 <span class="tie-error-message" style="color: red; font-size: 0.8em;"></span></p>
                     </div>
                     <div class="uma-ranks-container"></div>
                 </div>

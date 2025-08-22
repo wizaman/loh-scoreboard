@@ -229,6 +229,12 @@ input[type="text"] {
     width: 150px; /* Adjust width as needed */
 }
 
+.rank-radio-buttons label.error-rank {
+    background-color: #dc3545; /* Red background */
+    color: white;
+    border-color: #dc3545;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1200px) {
     .race-container {
