@@ -1,0 +1,255 @@
+body {
+    font-family: sans-serif;
+    margin: 20px auto; /* Centering body */
+    max-width: 1700px; /* Max width for the body */
+    padding: 0 20px; /* Add some padding */
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+h1 {
+    color: #0056b3;
+}
+
+.header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+#add-race-btn {
+    padding: 10px 15px;
+    font-size: 1em;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#add-race-btn:hover {
+    background-color: #218838;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+#copy-json-btn {
+    padding: 10px 15px;
+    font-size: 1em;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#copy-json-btn:hover {
+    background-color: #0056b3;
+}
+
+#reset-btn {
+    padding: 10px 15px;
+    font-size: 1em;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#reset-btn:hover {
+    background-color: #c82333;
+}
+
+
+.total-scores {
+    background-color: #e9ecef;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.total-scores h2 {
+    margin: 0 0 10px 0;
+}
+
+#total-score-details-container {
+    display: flex;
+    flex-direction: column; /* Stack trainers vertically */
+    align-items: center; /* Center items */
+    gap: 10px; /* Space between trainers */
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.score-entry {
+    display: flex;
+    align-items: baseline; /* Align items nicely */
+    gap: 15px; /* Add some gap */
+    width: 80%;
+    max-width: 400px;
+    padding: 8px 15px; /* A bit more padding */
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.score-entry .rank {
+    color: #6c757d; /* A neutral color */
+    min-width: 20px; /* Ensure alignment */
+    text-align: right;
+}
+
+.score-entry .trainer-name {
+    color: #0056b3;
+    flex-grow: 1; /* Allow name to take up space */
+}
+
+.score-entry .trainer-score {
+    color: #d9534f;
+}
+
+.race-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.race-number {
+    background-color: #6c757d;
+    color: white;
+    width: 30px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.race-container {
+    display: flex;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+.trainer-section {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    flex: 1;
+}
+
+.trainer-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.trainer-header h2 {
+    margin: 0;
+    color: #007bff;
+}
+
+.trainer-header input[type="text"] {
+    margin: 0;
+}
+
+.trainer-header p {
+    margin: 0;
+    font-weight: bold;
+    color: #d9534f;
+    font-size: 1.2em;
+}
+
+input[type="text"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.uma-ranks-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.uma-rank-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.uma-rank-group label {
+    font-weight: bold;
+    min-width: 20px;
+}
+
+.rank-radio-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.rank-radio-buttons input[type="radio"] {
+    display: none; /* ラジオボタンのデフォルト表示を消す */
+}
+
+.rank-radio-buttons label {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: normal;
+    width: 24px; /* Set a fixed width */
+    text-align: center; /* Center the text */
+}
+
+.rank-radio-buttons input[type="radio"]:checked + label {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.uma-name {
+    width: 150px; /* Adjust width as needed */
+}
+
+.rank-radio-buttons label.error-rank {
+    background-color: #dc3545; /* Red background */
+    color: white;
+    border-color: #dc3545;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .race-container {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
+    .trainer-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .uma-rank-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
