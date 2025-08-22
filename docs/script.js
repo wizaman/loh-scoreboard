@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const calculateButton = document.getElementById('calculateButton');
+    const rankInputs = document.querySelectorAll('.uma-rank');
+    const nameInputs = document.querySelectorAll('input[type="text"]');
 
     // スコア計算関数
     function calculateScore(rank) {
@@ -39,13 +40,17 @@ document.addEventListener('DOMContentLoaded', () => {
             calculateScore(player2Uma3Rank);
 
         document.getElementById('player2Score').textContent = player2TotalScore;
-
-        // 必要であれば、ここでプレイヤー名も表示に反映させる
-        // 例: document.querySelector('.player-section h2').textContent = player1Name;
     }
 
-    // ボタンクリックで計算を実行
-    calculateButton.addEventListener('click', performCalculation);
+    // 各着順入力フィールドに変更があった場合に計算を実行
+    rankInputs.forEach(input => {
+        input.addEventListener('input', performCalculation);
+    });
+
+    // プレイヤー名入力フィールドに変更があった場合に計算を実行
+    nameInputs.forEach(input => {
+        input.addEventListener('input', performCalculation);
+    });
 
     // 初期表示時に一度計算を実行
     performCalculation();
