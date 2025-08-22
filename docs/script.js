@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const racesContainer = document.getElementById('races-container');
-    const NUM_RACES = 5;
+    const addRaceBtn = document.getElementById('add-race-btn');
+    let raceCounter = 0;
 
     // スコア計算関数
     function calculateScore(rank) {
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function createRaceElement(raceNum) {
         const raceDiv = document.createElement('div');
         raceDiv.classList.add('race-wrapper');
+        raceDiv.dataset.raceNum = raceNum; // Store race number in a data attribute
         raceDiv.innerHTML = `
             <div class="race-number">${raceNum}R</div>
             <div class="race-container">
@@ -82,16 +84,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // アプリケーションを初期化
-    for (let i = 1; i <= NUM_RACES; i++) {
-        const raceEl = createRaceElement(i);
+    // 新しいレースを追加する関数
+    function addRace() {
+        raceCounter++;
+        const raceEl = createRaceElement(raceCounter);
         racesContainer.appendChild(raceEl);
 
-        const trainer1UmaContainer = raceEl.querySelector('#race' + i + '-trainer1-section .uma-ranks-container');
-        const trainer2UmaContainer = raceEl.querySelector('#race' + i + '-trainer2-section .uma-ranks-container');
+        const trainer1UmaContainer = raceEl.querySelector(`#race${raceCounter}-trainer1-section .uma-ranks-container`);
+        const trainer2UmaContainer = raceEl.querySelector(`#race${raceCounter}-trainer2-section .uma-ranks-container`);
 
-        createUmaInputs(i, 1, trainer1UmaContainer);
-        createUmaInputs(i, 2, trainer2UmaContainer);
+        createUmaInputs(raceCounter, 1, trainer1UmaContainer);
+        createUmaInputs(raceCounter, 2, trainer2UmaContainer);
+        
+        performCalculation(); // Recalculate everything
     }
 
     // 全体の計算処理
@@ -99,13 +104,15 @@ document.addEventListener('DOMContentLoaded', () => {
         let totalTrainer1Score = 0;
         let totalTrainer2Score = 0;
 
-        for (let i = 1; i <= NUM_RACES; i++) {
+        const raceWrappers = document.querySelectorAll('.race-wrapper');
+        raceWrappers.forEach(raceWrapper => {
+            const raceNum = raceWrapper.dataset.raceNum;
             let raceTrainer1Score = 0;
             let raceTrainer2Score = 0;
 
             // Trainer 1
             for (let u = 1; u <= 3; u++) {
-                const selectedRadio = document.querySelector(`input[name="race${i}trainer1Uma${u}"]:checked`);
+                const selectedRadio = document.querySelector(`input[name="race${raceNum}trainer1Uma${u}"]:checked`);
                 if (selectedRadio) {
                     raceTrainer1Score += calculateScore(parseInt(selectedRadio.value));
                 }
@@ -113,23 +120,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Trainer 2
             for (let u = 1; u <= 3; u++) {
-                const selectedRadio = document.querySelector(`input[name="race${i}trainer2Uma${u}"]:checked`);
+                const selectedRadio = document.querySelector(`input[name="race${raceNum}trainer2Uma${u}"]:checked`);
                 if (selectedRadio) {
                     raceTrainer2Score += calculateScore(parseInt(selectedRadio.value));
                 }
             }
 
-            document.getElementById(`race${i}-trainer1Score`).textContent = raceTrainer1Score;
-            document.getElementById(`race${i}-trainer2Score`).textContent = raceTrainer2Score;
+            const trainer1ScoreEl = document.getElementById(`race${raceNum}-trainer1Score`);
+            if(trainer1ScoreEl) {
+                trainer1ScoreEl.textContent = raceTrainer1Score;
+            }
+
+            const trainer2ScoreEl = document.getElementById(`race${raceNum}-trainer2Score`);
+            if(trainer2ScoreEl) {
+                trainer2ScoreEl.textContent = raceTrainer2Score;
+            }
+
 
             totalTrainer1Score += raceTrainer1Score;
             totalTrainer2Score += raceTrainer2Score;
-        }
+        });
 
         document.getElementById('trainer1TotalScore').textContent = totalTrainer1Score;
         document.getElementById('trainer2TotalScore').textContent = totalTrainer2Score;
     }
 
-    // 初期表示時に一度計算を実行
+    // イベントリスナーを設定
+    addRaceBtn.addEventListener('click', addRace);
+
+    // 初期状態で1レース表示
+    addRace();
+    
+    // 初期計算
     performCalculation();
 });
