@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ウマ娘 LoH スコア計算</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>ウマ娘 リーグオブヒーローズ スコア計算</h1>
+
+    <div class="player-section">
+        <h2>プレイヤー1</h2>
+        <label for="player1Name">プレイヤー名:</label>
+        <input type="text" id="player1Name" value="プレイヤーA"><br><br>
+        <label>ウマ娘の着順:</label><br>
+        <input type="number" class="uma-rank" id="player1Uma1" min="1" max="12" value="1">
+        <input type="number" class="uma-rank" id="player1Uma2" min="1" max="12" value="2">
+        <input type="number" class="uma-rank" id="player1Uma3" min="1" max="12" value="3"><br><br>
+        <p>スコア: <span id="player1Score">0</span>点</p>
+    </div>
+
+    <div class="player-section">
+        <h2>プレイヤー2</h2>
+        <label for="player2Name">プレイヤー名:</label>
+        <input type="text" id="player2Name" value="プレイヤーB"><br><br>
+        <label>ウマ娘の着順:</label><br>
+        <input type="number" class="uma-rank" id="player2Uma1" min="1" max="12" value="4">
+        <input type="number" class="uma-rank" id="player2Uma2" min="1" max="12" value="5">
+        <input type="number" class="uma-rank" id="player2Uma3" min="1" max="12" value="6"><br><br>
+        <p>スコア: <span id="player2Score">0</span>点</p>
+    </div>
+
+    <button id="calculateButton">スコア計算</button>
+
+    <script src="script.js"></script>
+</body>
+</html>
