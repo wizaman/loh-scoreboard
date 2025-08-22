@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const rankInputs = document.querySelectorAll('.uma-rank');
-    const nameInputs = document.querySelectorAll('input[type="text"]');
+    const playerSections = document.querySelectorAll('.player-section');
 
     // スコア計算関数
     function calculateScore(rank) {
@@ -13,44 +12,54 @@ document.addEventListener('DOMContentLoaded', () => {
         return 0; // 無効な着順の場合
     }
 
+    // プレイヤーごとのラジオボタンを生成し、イベントリスナーを設定
+    playerSections.forEach((section, playerIndex) => {
+        const playerNumber = playerIndex + 1;
+        const umaRankGroups = section.querySelectorAll('.uma-rank-group');
+
+        umaRankGroups.forEach((group, umaIndex) => {
+            const umaNumber = umaIndex + 1;
+            const rankContainer = document.createElement('div');
+            rankContainer.classList.add('rank-radio-buttons');
+
+            for (let rank = 1; rank <= 12; rank++) {
+                const radioId = `p${playerNumber}u${umaNumber}r${rank}`;
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.id = radioId;
+                radio.name = `player${playerNumber}Uma${umaNumber}`;
+                radio.value = rank;
+                radio.addEventListener('change', performCalculation);
+
+                const label = document.createElement('label');
+                label.htmlFor = radioId;
+                label.textContent = rank;
+
+                rankContainer.appendChild(radio);
+                rankContainer.appendChild(label);
+            }
+            group.appendChild(rankContainer);
+        });
+    });
+
     // 全体の計算処理
     function performCalculation() {
-        // プレイヤー1の処理
-        const player1Name = document.getElementById('player1Name').value;
-        const player1Uma1Rank = parseInt(document.getElementById('player1Uma1').value);
-        const player1Uma2Rank = parseInt(document.getElementById('player1Uma2').value);
-        const player1Uma3Rank = parseInt(document.getElementById('player1Uma3').value);
+        playerSections.forEach((section, playerIndex) => {
+            const playerNumber = playerIndex + 1;
+            let totalScore = 0;
+            const umaRankGroups = section.querySelectorAll('.uma-rank-group');
 
-        const player1TotalScore =
-            calculateScore(player1Uma1Rank) +
-            calculateScore(player1Uma2Rank) +
-            calculateScore(player1Uma3Rank);
+            umaRankGroups.forEach((group, umaIndex) => {
+                const umaNumber = umaIndex + 1;
+                const selectedRadio = document.querySelector(`input[name="player${playerNumber}Uma${umaNumber}"]:checked`);
+                if (selectedRadio) {
+                    totalScore += calculateScore(parseInt(selectedRadio.value));
+                }
+            });
 
-        document.getElementById('player1Score').textContent = player1TotalScore;
-
-        // プレイヤー2の処理
-        const player2Name = document.getElementById('player2Name').value;
-        const player2Uma1Rank = parseInt(document.getElementById('player2Uma1').value);
-        const player2Uma2Rank = parseInt(document.getElementById('player2Uma2').value);
-        const player2Uma3Rank = parseInt(document.getElementById('player2Uma3').value);
-
-        const player2TotalScore =
-            calculateScore(player2Uma1Rank) +
-            calculateScore(player2Uma2Rank) +
-            calculateScore(player2Uma3Rank);
-
-        document.getElementById('player2Score').textContent = player2TotalScore;
+            document.getElementById(`player${playerNumber}Score`).textContent = totalScore;
+        });
     }
-
-    // 各着順入力フィールドに変更があった場合に計算を実行
-    rankInputs.forEach(input => {
-        input.addEventListener('input', performCalculation);
-    });
-
-    // プレイヤー名入力フィールドに変更があった場合に計算を実行
-    nameInputs.forEach(input => {
-        input.addEventListener('input', performCalculation);
-    });
 
     // 初期表示時に一度計算を実行
     performCalculation();
