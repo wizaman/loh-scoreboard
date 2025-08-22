@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const playerSections = document.querySelectorAll('.player-section');
+    const trainerSections = document.querySelectorAll('.trainer-section');
     const nameInputs = document.querySelectorAll('input[type="text"].uma-name');
 
     // スコア計算関数
@@ -13,9 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return 0; // 無効な着順の場合
     }
 
-    // プレイヤーごとのラジオボタンを生成し、イベントリスナーを設定
-    playerSections.forEach((section, playerIndex) => {
-        const playerNumber = playerIndex + 1;
+    // トレーナーごとのラジオボタンを生成し、イベントリスナーを設定
+    trainerSections.forEach((section, trainerIndex) => {
+        const trainerNumber = trainerIndex + 1;
         const umaRankGroups = section.querySelectorAll('.uma-rank-group');
 
         umaRankGroups.forEach((group, umaIndex) => {
@@ -24,11 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
             rankContainer.classList.add('rank-radio-buttons');
 
             for (let rank = 1; rank <= 12; rank++) {
-                const radioId = `p${playerNumber}u${umaNumber}r${rank}`;
+                const radioId = `t${trainerNumber}u${umaNumber}r${rank}`;
                 const radio = document.createElement('input');
                 radio.type = 'radio';
                 radio.id = radioId;
-                radio.name = `player${playerNumber}Uma${umaNumber}`;
+                radio.name = `trainer${trainerNumber}Uma${umaNumber}`;
                 radio.value = rank;
                 radio.addEventListener('change', performCalculation);
 
@@ -45,20 +45,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 全体の計算処理
     function performCalculation() {
-        playerSections.forEach((section, playerIndex) => {
-            const playerNumber = playerIndex + 1;
+        trainerSections.forEach((section, trainerIndex) => {
+            const trainerNumber = trainerIndex + 1;
             let totalScore = 0;
             const umaRankGroups = section.querySelectorAll('.uma-rank-group');
 
             umaRankGroups.forEach((group, umaIndex) => {
                 const umaNumber = umaIndex + 1;
-                const selectedRadio = document.querySelector(`input[name="player${playerNumber}Uma${umaNumber}"]:checked`);
+                const selectedRadio = document.querySelector(`input[name="trainer${trainerNumber}Uma${umaNumber}"]:checked`);
                 if (selectedRadio) {
                     totalScore += calculateScore(parseInt(selectedRadio.value));
                 }
             });
 
-            document.getElementById(`player${playerNumber}Score`).textContent = totalScore;
+            document.getElementById(`trainer${trainerNumber}Score`).textContent = totalScore;
         });
     }
 

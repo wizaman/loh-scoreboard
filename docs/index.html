@@ -9,46 +9,48 @@
 <body>
     <h1>ウマ娘 リーグオブヒーローズ スコア計算</h1>
 
-    <div class="player-section">
-        <h2>プレイヤー1</h2>
-        <label for="player1Name">プレイヤー名:</label>
-        <input type="text" id="player1Name" value="プレイヤーA"><br><br>
+    <div class="trainer-section">
+        <div class="trainer-header">
+            <h2>トレーナー1</h2>
+            <input type="text" id="trainer1Name" value="トレーナーA">
+            <p>スコア: <span id="trainer1Score">0</span>点</p>
+        </div>
         <div class="uma-ranks-container">
             <div class="uma-rank-group">
                 <label>ウマ娘1:</label>
-                <input type="text" class="uma-name" id="player1Uma1Name" placeholder="ウマ娘名">
+                <input type="text" class="uma-name" id="trainer1Uma1Name" placeholder="ウマ娘名">
             </div>
             <div class="uma-rank-group">
                 <label>ウマ娘2:</label>
-                <input type="text" class="uma-name" id="player1Uma2Name" placeholder="ウマ娘名">
+                <input type="text" class="uma-name" id="trainer1Uma2Name" placeholder="ウマ娘名">
             </div>
             <div class="uma-rank-group">
                 <label>ウマ娘3:</label>
-                <input type="text" class="uma-name" id="player1Uma3Name" placeholder="ウマ娘名">
+                <input type="text" class="uma-name" id="trainer1Uma3Name" placeholder="ウマ娘名">
             </div>
         </div>
-        <p>スコア: <span id="player1Score">0</span>点</p>
     </div>
 
-    <div class="player-section">
-        <h2>プレイヤー2</h2>
-        <label for="player2Name">プレイヤー名:</label>
-        <input type="text" id="player2Name" value="プレイヤーB"><br><br>
+    <div class="trainer-section">
+        <div class="trainer-header">
+            <h2>トレーナー2</h2>
+            <input type="text" id="trainer2Name" value="トレーナーB">
+            <p>スコア: <span id="trainer2Score">0</span>点</p>
+        </div>
         <div class="uma-ranks-container">
             <div class="uma-rank-group">
                 <label>ウマ娘1:</label>
-                <input type="text" class="uma-name" id="player2Uma1Name" placeholder="ウマ娘名">
+                <input type="text" class="uma-name" id="trainer2Uma1Name" placeholder="ウマ娘名">
             </div>
             <div class="uma-rank-group">
                 <label>ウマ娘2:</label>
-                <input type="text" class="uma-name" id="player2Uma2Name" placeholder="ウマ娘名">
+                <input type="text" class="uma-name" id="trainer2Uma2Name" placeholder="ウマ娘名">
             </div>
             <div class="uma-rank-group">
                 <label>ウマ娘3:</label>
-                <input type="text" class="uma-name" id="player2Uma3Name" placeholder="ウマ娘名">
+                <input type="text" class="uma-name" id="trainer2Uma3Name" placeholder="ウマ娘名">
             </div>
         </div>
-        <p>スコア: <span id="player2Score">0</span>点</p>
     </div>
 
     <script src="script.js"></script>

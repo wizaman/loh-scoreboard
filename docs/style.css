@@ -10,7 +10,7 @@ h1 {
     text-align: center;
 }
 
-.player-section {
+.trainer-section {
     background-color: #fff;
     border: 1px solid #ddd;
     padding: 20px;
@@ -19,14 +19,31 @@ h1 {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.player-section h2 {
+.trainer-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.trainer-header h2 {
+    margin: 0;
     color: #007bff;
-    margin-top: 0;
+}
+
+.trainer-header input[type="text"] {
+    margin: 0;
+}
+
+.trainer-header p {
+    margin: 0;
+    font-weight: bold;
+    color: #d9534f;
+    font-size: 1.2em;
 }
 
 input[type="text"] {
     padding: 8px;
-    margin-bottom: 0; /* Adjusted for alignment */
     border: 1px solid #ccc;
     border-radius: 4px;
 }
@@ -75,14 +92,6 @@ input[type="text"] {
     background-color: #007bff;
     color: white;
     border-color: #007bff;
-}
-
-#player1Score, #player2Score {
-    font-weight: bold;
-    color: #d9534f;
-    font-size: 1.2em;
-    margin-top: 15px;
-    display: inline-block;
 }
 
 .uma-name {
