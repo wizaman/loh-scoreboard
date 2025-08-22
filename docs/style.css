@@ -165,3 +165,22 @@ input[type="text"] {
 .uma-name {
     width: 150px; /* Adjust width as needed */
 }
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .race-container {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
+    .trainer-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .uma-rank-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
