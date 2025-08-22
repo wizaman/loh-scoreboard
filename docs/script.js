@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const racesContainer = document.getElementById('races-container');
     const addRaceBtn = document.getElementById('add-race-btn');
     const copyJsonBtn = document.getElementById('copy-json-btn');
+    const resetBtn = document.getElementById('reset-btn');
     const totalScoreContainer = document.getElementById('total-score-details-container');
 
     // --- State ---
@@ -238,9 +239,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function resetState() {
+        if (window.confirm('すべての入力データをリセットして初期状態に戻します。よろしいですか？')) {
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+            location.reload();
+        }
+    }
+
     // --- Initialization ---
     addRaceBtn.addEventListener('click', addRace);
     copyJsonBtn.addEventListener('click', copyStateToClipboard);
+    resetBtn.addEventListener('click', resetState);
 
     loadStateFromLocalStorage();
 });
