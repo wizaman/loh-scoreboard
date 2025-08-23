@@ -353,6 +353,12 @@ input[type="text"] {
     width: 150px; /* Adjust width as needed */
 }
 
+.uma-name-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 
 
 /* Responsive adjustments */

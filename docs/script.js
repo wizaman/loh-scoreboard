@@ -241,15 +241,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const group = document.createElement('div');
             group.classList.add('uma-rank-group');
             const umaNameInputId = `r${raceNum}t${trainerNum}u${i}name`;
-            group.innerHTML = `<label for="${umaNameInputId}">${i}:</label>`;
             
+            const umaNameInputWrapper = document.createElement('div');
+            umaNameInputWrapper.classList.add('uma-name-input-wrapper');
+
+            const label = document.createElement('label');
+            label.htmlFor = umaNameInputId;
+            label.textContent = `${i}:`;
+            umaNameInputWrapper.appendChild(label);
+
             const nameInput = document.createElement('input');
             nameInput.type = 'text';
             nameInput.id = umaNameInputId;
             nameInput.classList.add('uma-name');
             nameInput.placeholder = 'ウマ娘名';
             nameInput.addEventListener('input', saveState);
-            group.appendChild(nameInput);
+            umaNameInputWrapper.appendChild(nameInput);
+
+            group.appendChild(umaNameInputWrapper);
 
             const rankContainer = document.createElement('div');
             rankContainer.classList.add('rank-radio-buttons');
