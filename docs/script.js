@@ -143,6 +143,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="trainer-section" data-trainer-id="1">
                     <div class="trainer-header">
                         <input type="text" class="trainer-name-input" placeholder="トレーナー名" aria-label="トレーナー名">
+                        <div class="trainer-actions">
+                            <button class="copy-trainer-data-btn">編成コピー</button>
+                            <button class="paste-trainer-data-btn">編成ペースト</button>
+                            <button class="clear-trainer-data-btn">クリア</button>
+                        </div>
                         <div class="score-and-error-container">
                             <p>スコア: <span class="race-score">0</span>pt</p>
                             <p class="tie-error-message"></p>
@@ -153,6 +158,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="trainer-section" data-trainer-id="2">
                     <div class="trainer-header">
                         <input type="text" class="trainer-name-input" placeholder="トレーナー名" aria-label="トレーナー名">
+                        <div class="trainer-actions">
+                            <button class="copy-trainer-data-btn">編成コピー</button>
+                            <button class="paste-trainer-data-btn">編成ペースト</button>
+                            <button class="clear-trainer-data-btn">クリア</button>
+                        </div>
                         <div class="score-and-error-container">
                             <p>スコア: <span class="race-score">0</span>pt</p>
                             <p class="tie-error-message"></p>
@@ -164,6 +174,15 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         raceDiv.querySelectorAll('.trainer-name-input').forEach(input => {
             input.addEventListener('input', performCalculationAndSave);
+        });
+        raceDiv.querySelectorAll('.copy-trainer-data-btn').forEach(button => {
+            button.addEventListener('click', copyTrainerDataToClipboard);
+        });
+        raceDiv.querySelectorAll('.paste-trainer-data-btn').forEach(button => {
+            button.addEventListener('click', pasteTrainerDataFromClipboard);
+        });
+        raceDiv.querySelectorAll('.clear-trainer-data-btn').forEach(button => {
+            button.addEventListener('click', clearTrainerData);
         });
         return raceDiv;
     }
@@ -241,6 +260,40 @@ document.addEventListener('DOMContentLoaded', () => {
         return { races };
     }
 
+    function getTrainerDataAsObject(trainerSection) {
+        const trainerData = { uma: [] };
+        trainerData.name = trainerSection.querySelector('.trainer-name-input').value;
+        trainerSection.querySelectorAll('.uma-rank-group').forEach(group => {
+            const umaName = group.querySelector('.uma-name').value;
+            const checkedRank = group.querySelector('input[type="radio"]:checked');
+            trainerData.uma.push({
+                name: umaName
+            });
+        });
+        return trainerData;
+    }
+
+    function setTrainerDataFromObject(trainerSection, data) {
+        trainerSection.querySelector('.trainer-name-input').value = data.name || '';
+        trainerSection.querySelectorAll('.uma-rank-group').forEach((group, umaIndex) => {
+            const umaData = data.uma[umaIndex];
+            if (umaData) {
+                group.querySelector('.uma-name').value = umaData.name || '';
+                // Clear existing radio selections for this uma
+                group.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+                if (umaData.rank) {
+                    const rankRadio = group.querySelector(`input[value="${umaData.rank}"]`);
+                    if (rankRadio) rankRadio.checked = true;
+                }
+            } else {
+                // If no data for this uma, clear inputs
+                group.querySelector('.uma-name').value = '';
+                group.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+            }
+        });
+        performCalculationAndSave(); // Recalculate scores after setting data
+    }
+
     function saveState() {
         const state = getStateAsObject();
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
@@ -305,11 +358,77 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function copyTrainerDataToClipboard(event) {
+        const trainerSection = event.target.closest('.trainer-section');
+        if (!trainerSection) return;
+
+        const trainerData = getTrainerDataAsObject(trainerSection);
+        const jsonString = JSON.stringify(trainerData, null, 2);
+
+        navigator.clipboard.writeText(jsonString).then(() => {
+            const originalText = event.target.textContent;
+            event.target.textContent = 'Copied!';
+            setTimeout(() => { event.target.textContent = originalText; }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy trainer data JSON', err);
+            alert('編成データのコピーに失敗しました。');
+        });
+    }
+
+    function pasteTrainerDataFromClipboard(event) {
+        const trainerSection = event.target.closest('.trainer-section');
+        if (!trainerSection) return;
+
+        navigator.clipboard.readText().then(jsonString => {
+            if (!jsonString.trim()) {
+                alert('ペーストする編成データがありません。');
+                return;
+            }
+            try {
+                const parsedData = JSON.parse(jsonString);
+                // Basic validation for expected structure
+                if (parsedData && Array.isArray(parsedData.uma)) {
+                    setTrainerDataFromObject(trainerSection, parsedData);
+                    const originalText = event.target.textContent;
+                    event.target.textContent = 'Pasted!';
+                    setTimeout(() => { event.target.textContent = originalText; }, 2000);
+                } else {
+                    alert('無効な編成データです。期待される形式: { "name": "...", "uma": [...] }');
+                }
+            } catch (e) {
+                console.error('Failed to parse trainer data JSON:', e);
+                alert('編成データの解析に失敗しました。入力が正しいJSON形式であることを確認してください。');
+            }
+        }).catch(err => {
+            console.error('Failed to read from clipboard', err);
+            alert('クリップボードからの読み込みに失敗しました。');
+        });
+    }
+
     function resetState() {
         if (window.confirm('すべての入力データをリセットして初期状態に戻します。よろしいですか？')) {
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             location.reload();
         }
+    }
+
+    function clearTrainerData(event) {
+        const trainerSection = event.target.closest('.trainer-section');
+        if (!trainerSection) return;
+
+        // Clear trainer name input
+        trainerSection.querySelector('.trainer-name-input').value = '';
+
+        // Clear Uma Musume names and ranks
+        trainerSection.querySelectorAll('.uma-rank-group').forEach(group => {
+            group.querySelector('.uma-name').value = '';
+            group.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+        });
+
+        performCalculationAndSave(); // Recalculate scores after clearing data
+        const originalText = event.target.textContent;
+        event.target.textContent = 'Cleared!';
+        setTimeout(() => { event.target.textContent = originalText; }, 2000);
     }
 
     function pasteStateFromClipboard() {

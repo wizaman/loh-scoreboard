@@ -161,6 +161,8 @@ h1 {
     align-items: center;
     gap: 15px;
     margin-bottom: 15px;
+    position: relative; /* Add this */
+    padding-right: 160px; /* Adjust this value as needed to prevent overlap */
 }
 
 .trainer-header h2 {
@@ -182,6 +184,47 @@ h1 {
 
 .trainer-header .tie-error-message {
     color: orange;
+}
+
+.trainer-actions {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    gap: 5px;
+}
+
+/* Add styles for the new buttons */
+.copy-trainer-data-btn,
+.paste-trainer-data-btn {
+    padding: 5px 10px;
+    font-size: 0.8em;
+    background-color: #6c757d; /* Example color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.copy-trainer-data-btn:hover,
+.paste-trainer-data-btn:hover {
+    background-color: #5a6268;
+}
+
+.clear-trainer-data-btn {
+    padding: 5px 10px;
+    font-size: 0.8em;
+    background-color: #dc3545; /* Red color for clear/reset */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.clear-trainer-data-btn:hover {
+    background-color: #c82333;
 }
 
 .score-and-error-container {
