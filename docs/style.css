@@ -253,3 +253,9 @@ input[type="text"] {
         align-items: flex-start;
     }
 }
+
+.tie-error-message {
+    color: orange;
+    padding-left: 20px;
+    font-size: 0.8em;
+}

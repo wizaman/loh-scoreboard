@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const trainerRanks = trainerRankData.get(trainerSection);
                     const hasTieForTrainer = trainerRanks.some(rank => tiedRanks.has(rank));
                     if (hasTieForTrainer) {
-                        trainerSection.querySelector('.tie-error-message').textContent = '同着入力エラー！';
+                        trainerSection.querySelector('.tie-error-message').textContent = '⚠ 同着入力があります';
                     }
                 });
             }
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
             scoreEntry.innerHTML = `
                 <span class="rank">${index + 1}.</span>
                 <span class="trainer-name">${name}</span>
-                <span class="trainer-score">${score}点</span>
+                <span class="trainer-score">${score}pt</span>
             `;
             totalScoreContainer.appendChild(scoreEntry);
         });
@@ -135,14 +135,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="trainer-section" data-trainer-id="1">
                     <div class="trainer-header">
                         <input type="text" class="trainer-name-input" placeholder="トレーナー名">
-                        <p>スコア: <span class="race-score">0</span>点 <span class="tie-error-message" style="color: red; font-size: 0.8em;"></span></p>
+                        <p>スコア: <span class="race-score">0</span>pt<span class="tie-error-message"></span></p>
                     </div>
                     <div class="uma-ranks-container"></div>
                 </div>
                 <div class="trainer-section" data-trainer-id="2">
                     <div class="trainer-header">
                         <input type="text" class="trainer-name-input" placeholder="トレーナー名">
-                        <p>スコア: <span class="race-score">0</span>点 <span class="tie-error-message" style="color: red; font-size: 0.8em;"></span></p>
+                        <p>スコア: <span class="race-score">0</span>pt<span class="tie-error-message"></span></p>
                     </div>
                     <div class="uma-ranks-container"></div>
                 </div>
