@@ -116,6 +116,8 @@ h1 {
 
 .score-entry .trainer-score {
     color: #d9534f;
+    width: 60px;
+    text-align: right;
 }
 
 .race-wrapper {
