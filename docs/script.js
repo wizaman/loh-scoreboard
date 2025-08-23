@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const racesContainer = document.getElementById('races-container');
     const addRaceBtn = document.getElementById('add-race-btn');
     const copyJsonBtn = document.getElementById('copy-json-btn');
+    const pasteJsonBtn = document.getElementById('paste-json-btn');
     const resetBtn = document.getElementById('reset-btn');
     const totalScoreContainer = document.getElementById('total-score-details-container');
 
@@ -90,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const trainerRanks = trainerRankData.get(trainerSection);
                     const hasTieForTrainer = trainerRanks.some(rank => tiedRanks.has(rank));
                     if (hasTieForTrainer) {
-                        trainerSection.querySelector('.tie-error-message').textContent = '同着入力エラー！';
+                        trainerSection.querySelector('.tie-error-message').textContent = '⚠ 同着入力があります';
                     }
                 });
             }
@@ -117,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             scoreEntry.innerHTML = `
                 <span class="rank">${index + 1}.</span>
                 <span class="trainer-name">${name}</span>
-                <span class="trainer-score">${score}点</span>
+                <span class="trainer-score">${score}pt</span>
             `;
             totalScoreContainer.appendChild(scoreEntry);
         });
@@ -134,15 +135,21 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="race-container">
                 <div class="trainer-section" data-trainer-id="1">
                     <div class="trainer-header">
-                        <input type="text" class="trainer-name-input" placeholder="トレーナー名">
-                        <p>スコア: <span class="race-score">0</span>点 <span class="tie-error-message" style="color: red; font-size: 0.8em;"></span></p>
+                        <input type="text" class="trainer-name-input" placeholder="トレーナー名" aria-label="トレーナー名">
+                        <div class="score-and-error-container">
+                            <p>スコア: <span class="race-score">0</span>pt</p>
+                            <p class="tie-error-message"></p>
+                        </div>
                     </div>
                     <div class="uma-ranks-container"></div>
                 </div>
                 <div class="trainer-section" data-trainer-id="2">
                     <div class="trainer-header">
-                        <input type="text" class="trainer-name-input" placeholder="トレーナー名">
-                        <p>スコア: <span class="race-score">0</span>点 <span class="tie-error-message" style="color: red; font-size: 0.8em;"></span></p>
+                        <input type="text" class="trainer-name-input" placeholder="トレーナー名" aria-label="トレーナー名">
+                        <div class="score-and-error-container">
+                            <p>スコア: <span class="race-score">0</span>pt</p>
+                            <p class="tie-error-message"></p>
+                        </div>
                     </div>
                     <div class="uma-ranks-container"></div>
                 </div>
@@ -158,10 +165,12 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 1; i <= 3; i++) {
             const group = document.createElement('div');
             group.classList.add('uma-rank-group');
-            group.innerHTML = `<label>ウマ娘${i}:</label>`;
+            const umaNameInputId = `r${raceNum}t${trainerNum}u${i}name`;
+            group.innerHTML = `<label for="${umaNameInputId}">ウマ娘${i}:</label>`;
             
             const nameInput = document.createElement('input');
             nameInput.type = 'text';
+            nameInput.id = umaNameInputId;
             nameInput.classList.add('uma-name');
             nameInput.placeholder = 'ウマ娘名';
             nameInput.addEventListener('input', saveState);
@@ -296,9 +305,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function pasteStateFromClipboard() {
+        const jsonString = prompt('ここにJSONデータをペーストしてください:');
+        if (!jsonString) return; // User cancelled or entered empty string
+
+        try {
+            const parsedState = JSON.parse(jsonString);
+            // Basic validation: check if it has a 'races' array
+            if (parsedState && Array.isArray(parsedState.races)) {
+                loadState(parsedState);
+            } else {
+                alert('無効なJSONデータです。\n期待される形式: { "races": [...] }');
+            }
+        } catch (e) {
+            console.error('Failed to parse JSON:', e);
+            alert('JSONの解析に失敗しました。入力が正しいJSON形式であることを確認してください。');
+        }
+    }
+
     // --- Initialization ---
     addRaceBtn.addEventListener('click', addRace);
     copyJsonBtn.addEventListener('click', copyStateToClipboard);
+    pasteJsonBtn.addEventListener('click', pasteStateFromClipboard);
     resetBtn.addEventListener('click', resetState);
 
     loadStateFromLocalStorage();

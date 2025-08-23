@@ -13,6 +13,8 @@ h1 {
 
 .header-container {
     display: flex;
+    flex-direction: column; /* Stack h1 and buttons vertically */
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     gap: 20px;
@@ -39,7 +41,8 @@ h1 {
     gap: 10px;
 }
 
-#copy-json-btn {
+#copy-json-btn,
+#paste-json-btn {
     padding: 10px 15px;
     font-size: 1em;
     background-color: #007bff;
@@ -50,7 +53,8 @@ h1 {
     transition: background-color 0.3s;
 }
 
-#copy-json-btn:hover {
+#copy-json-btn:hover,
+#paste-json-btn:hover {
     background-color: #0056b3;
 }
 
@@ -116,6 +120,8 @@ h1 {
 
 .score-entry .trainer-score {
     color: #d9534f;
+    width: 60px;
+    text-align: right;
 }
 
 .race-wrapper {
@@ -171,6 +177,18 @@ h1 {
     font-weight: bold;
     color: #d9534f;
     font-size: 1.2em;
+    padding-right: 15px;
+}
+
+.trainer-header .tie-error-message {
+    color: orange;
+}
+
+.score-and-error-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap */
+    align-items: baseline; /* Align items nicely */
+    gap: 5px; /* Small gap between score and error message */
 }
 
 input[type="text"] {
