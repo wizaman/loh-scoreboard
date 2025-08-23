@@ -146,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="trainer-actions">
                             <button class="copy-trainer-data-btn">編成コピー</button>
                             <button class="paste-trainer-data-btn">編成ペースト</button>
+                            <button class="clear-trainer-data-btn">クリア</button>
                         </div>
                         <div class="score-and-error-container">
                             <p>スコア: <span class="race-score">0</span>pt</p>
@@ -160,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="trainer-actions">
                             <button class="copy-trainer-data-btn">編成コピー</button>
                             <button class="paste-trainer-data-btn">編成ペースト</button>
+                            <button class="clear-trainer-data-btn">クリア</button>
                         </div>
                         <div class="score-and-error-container">
                             <p>スコア: <span class="race-score">0</span>pt</p>
@@ -178,6 +180,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         raceDiv.querySelectorAll('.paste-trainer-data-btn').forEach(button => {
             button.addEventListener('click', pasteTrainerDataFromClipboard);
+        });
+        raceDiv.querySelectorAll('.clear-trainer-data-btn').forEach(button => {
+            button.addEventListener('click', clearTrainerData);
         });
         return raceDiv;
     }
@@ -405,6 +410,25 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             location.reload();
         }
+    }
+
+    function clearTrainerData(event) {
+        const trainerSection = event.target.closest('.trainer-section');
+        if (!trainerSection) return;
+
+        // Clear trainer name input
+        trainerSection.querySelector('.trainer-name-input').value = '';
+
+        // Clear Uma Musume names and ranks
+        trainerSection.querySelectorAll('.uma-rank-group').forEach(group => {
+            group.querySelector('.uma-name').value = '';
+            group.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+        });
+
+        performCalculationAndSave(); // Recalculate scores after clearing data
+        const originalText = event.target.textContent;
+        event.target.textContent = 'Cleared!';
+        setTimeout(() => { event.target.textContent = originalText; }, 2000);
     }
 
     function pasteStateFromClipboard() {
