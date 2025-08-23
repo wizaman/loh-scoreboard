@@ -388,6 +388,19 @@ input[type="text"] {
         flex-direction: column;
         align-items: flex-start;
     }
+
+    .modal-content {
+        width: 95%;
+    }
+
+    #add-race-btn,
+    #copy-json-btn,
+    #paste-json-btn,
+    #reset-btn {
+        font-size: 0.9em; /* フォントサイズを小さくする */
+        padding: 8px 12px; /* パディングも調整してボタンサイズを小さくする */
+        white-space: nowrap; /* 改行を防ぐ */
+    }
 }
 
 /* Modal Styles */
