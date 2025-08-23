@@ -1,8 +1,8 @@
 body {
     font-family: sans-serif;
     margin: 20px auto; /* Centering body */
-    max-width: 1700px; /* Max width for the body */
-    padding: 0 20px; /* Add some padding */
+    max-width: 1700px;
+    padding: 0 20px;
     background-color: #f4f4f4;
     color: #333;
 }
@@ -362,7 +362,7 @@ input[type="text"] {
 
 
 /* Responsive adjustments */
-@media (max-width: 1200px) {
+@media (max-width: 1700px) {
     .race-container {
         flex-direction: column;
     }
