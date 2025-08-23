@@ -368,6 +368,8 @@ input[type="text"] {
     }
     .race-wrapper {
         flex-direction: column;
+        width: fit-content; /* コンテンツの幅に合わせる */
+        margin: 0 auto 20px auto; /* 上マージン0、左右自動、下マージン20px */
     }
     .race-info {
         margin-bottom: 10px; /* レース情報とレースコンテナの間にスペースを追加 */
