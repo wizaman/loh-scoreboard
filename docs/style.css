@@ -401,6 +401,12 @@ input[type="text"] {
         padding: 8px 12px; /* パディングも調整してボタンサイズを小さくする */
         white-space: nowrap; /* 改行を防ぐ */
     }
+
+    h1 {
+        font-size: 1.8em; /* h1のフォントサイズを小さくする */
+        margin-top: 10px; /* 上マージンを小さくする */
+        margin-bottom: 10px; /* 下マージンを小さくする */
+    }
 }
 
 /* Modal Styles */
