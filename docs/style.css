@@ -318,6 +318,24 @@ input[type="text"] {
     text-align: center; /* Center the text */
 }
 
+.clear-rank-button {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #6c757d; /* ダークグレーに変更 */
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: normal;
+    width: 36px; /* Set a fixed width */
+    text-align: center; /* Center the text */
+    margin-left: 5px; /* ラジオボタンとの間隔 */
+}
+
+.clear-rank-button:hover {
+    background-color: #5a6268; /* ホバー時の色も変更 */
+}
+
 .rank-radio-buttons input[type="radio"]:checked + label {
     background-color: #28a745;
     color: white;
