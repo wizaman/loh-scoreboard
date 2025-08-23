@@ -1,0 +1,5 @@
+description="PRレビューで指摘があれば対処する"
+prompt = """
+PR #{{args}} のコメントおよびインラインレビューコメントで指摘された内容を確認し、必要に応じてコードやドキュメントを修正してください。
+レビュー確認には `gh pr view {{args}} --json title,body,comments,reviews` コマンドを使用してよい。
+"""
