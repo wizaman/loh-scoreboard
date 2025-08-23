@@ -509,3 +509,29 @@ input[type="text"] {
         width: 95%;
     }
 }
+
+.github-fixed-button {
+    position: fixed;
+    bottom: 20px; /* ページ下からの距離 */
+    right: 20px; /* ページ右からの距離 */
+    width: 50px; /* アイコンの幅 */
+    height: 50px; /* アイコンの高さ */
+    background-color: #333; /* 背景色 */
+    border-radius: 50%; /* 円形にする */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* 影 */
+    z-index: 100; /* 他の要素の上に表示 */
+    transition: background-color 0.3s ease;
+}
+
+.github-fixed-button:hover {
+    background-color: #555;
+}
+
+.github-fixed-button svg {
+    fill: white; /* アイコンの色 */
+    width: 60%; /* SVGのサイズ調整 */
+    height: 60%;
+}
