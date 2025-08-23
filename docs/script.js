@@ -159,10 +159,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         const oldRadioId = radio.id;
                         const rankValue = radio.value;
                         const newRadioId = `r${newRaceNum}t${trainerId}u${umaNum}r${rankValue}`;
+
+                        // Get the label associated with the old radio ID BEFORE changing the radio ID
+                        const radioLabel = group.querySelector(`label[for="${oldRadioId}"]`);
+
                         radio.id = newRadioId;
                         radio.name = `race${newRaceNum}trainer${trainerId}Uma${umaNum}`;
-                        // Update label's for attribute
-                        const radioLabel = group.querySelector(`label[for="${oldRadioId}"]`);
+                        
+                        // Update label's for attribute using the newRadioId
                         if (radioLabel) radioLabel.htmlFor = newRadioId;
                     });
                 });
