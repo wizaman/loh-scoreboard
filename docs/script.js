@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="race-container">
                 <div class="trainer-section" data-trainer-id="1">
                     <div class="trainer-header">
-                        <input type="text" class="trainer-name-input" placeholder="トレーナー名" aria-label="トレーナー名">
+                        <input type="text" class="trainer-name-input" placeholder="トレーナー名" aria-label="トレーナー名" value="トレーナーA">
                         <div class="trainer-actions">
                             <button class="copy-trainer-data-btn">編成コピー</button>
                             <button class="paste-trainer-data-btn">編成ペースト</button>
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="trainer-section" data-trainer-id="2">
                     <div class="trainer-header">
-                        <input type="text" class="trainer-name-input" placeholder="トレーナー名" aria-label="トレーナー名">
+                        <input type="text" class="trainer-name-input" placeholder="トレーナー名" aria-label="トレーナー名" value="トレーナーB">
                         <div class="trainer-actions">
                             <button class="copy-trainer-data-btn">編成コピー</button>
                             <button class="paste-trainer-data-btn">編成ペースト</button>
