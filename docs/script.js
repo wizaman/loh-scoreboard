@@ -131,6 +131,46 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function reindexRaces() {
+        const raceWrappers = document.querySelectorAll('.race-wrapper');
+        raceCounter = 0; // Reset raceCounter to re-assign numbers from 1
+
+        raceWrappers.forEach((raceWrapper, index) => {
+            const newRaceNum = index + 1;
+            raceWrapper.dataset.raceNum = newRaceNum;
+            raceWrapper.querySelector('.race-number').textContent = `${newRaceNum}R`;
+
+            // Update IDs and names within this raceWrapper
+            raceWrapper.querySelectorAll('.trainer-section').forEach((trainerSection, trainerIndex) => {
+                const trainerId = trainerSection.dataset.trainerId; // 1 or 2
+
+                trainerSection.querySelectorAll('.uma-rank-group').forEach((group, umaIndex) => {
+                    const umaNum = umaIndex + 1;
+
+                    // Update Uma Musume name input ID
+                    const umaNameInput = group.querySelector('.uma-name');
+                    umaNameInput.id = `r${newRaceNum}t${trainerId}u${umaNum}name`;
+                    // Update label's for attribute
+                    const umaNameLabel = group.querySelector(`label[for^="r${raceWrapper.dataset.raceNum}t${trainerId}u${umaNum}name"]`);
+                    if (umaNameLabel) umaNameLabel.htmlFor = umaNameInput.id;
+
+                    // Update radio button IDs and names
+                    group.querySelectorAll('.rank-radio-buttons input[type="radio"]').forEach(radio => {
+                        const oldRadioId = radio.id;
+                        const rankValue = radio.value;
+                        const newRadioId = `r${newRaceNum}t${trainerId}u${umaNum}r${rankValue}`;
+                        radio.id = newRadioId;
+                        radio.name = `race${newRaceNum}trainer${trainerId}Uma${umaNum}`;
+                        // Update label's for attribute
+                        const radioLabel = group.querySelector(`label[for="${oldRadioId}"]`);
+                        if (radioLabel) radioLabel.htmlFor = newRadioId;
+                    });
+                });
+            });
+        });
+        raceCounter = raceWrappers.length; // Update global raceCounter
+    }
+
     // --- DOM Creation Functions ---
 
     function createRaceElement(raceNum) {
@@ -138,7 +178,10 @@ document.addEventListener('DOMContentLoaded', () => {
         raceDiv.classList.add('race-wrapper');
         raceDiv.dataset.raceNum = raceNum;
         raceDiv.innerHTML = `
-            <div class="race-number">${raceNum}R</div>
+            <div class="race-info">
+                <div class="race-number">${raceNum}R</div>
+                <button class="delete-race-btn">×</button>
+            </div>
             <div class="race-container">
                 <div class="trainer-section" data-trainer-id="1">
                     <div class="trainer-header">
@@ -184,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
         raceDiv.querySelectorAll('.clear-trainer-data-btn').forEach(button => {
             button.addEventListener('click', clearTrainerData);
         });
+        raceDiv.querySelector('.delete-race-btn').addEventListener('click', deleteRace);
         return raceDiv;
     }
 
@@ -434,6 +478,17 @@ document.addEventListener('DOMContentLoaded', () => {
     function pasteStateFromClipboard() {
         // This function will now be triggered by the modal's paste button
         // The prompt is replaced by the modal's textarea
+    }
+
+    function deleteRace(event) {
+        const raceWrapper = event.target.closest('.race-wrapper');
+        if (!raceWrapper) return;
+
+        if (window.confirm('このレースを削除しますか？')) {
+            raceWrapper.remove();
+            reindexRaces(); // Call a new function to re-index
+            performCalculationAndSave();
+        }
     }
 
     // --- Modal Functions ---
