@@ -262,8 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const umaName = group.querySelector('.uma-name').value;
             const checkedRank = group.querySelector('input[type="radio"]:checked');
             trainerData.uma.push({
-                name: umaName,
-                rank: checkedRank ? parseInt(checkedRank.value) : null
+                name: umaName
             });
         });
         return trainerData;
