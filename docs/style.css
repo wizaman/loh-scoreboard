@@ -67,12 +67,16 @@ h1 {
 
 #copy-json-btn,
 #paste-json-btn,
-#modal-paste-btn {
+#modal-paste-btn,
+.copy-trainer-data-btn,
+.paste-trainer-data-btn {
     background-color: #007bff;
 }
 #copy-json-btn:hover,
 #paste-json-btn:hover,
-#modal-paste-btn:hover {
+#modal-paste-btn:hover,
+.copy-trainer-data-btn:hover,
+.paste-trainer-data-btn:hover {
     background-color: #0056b3;
 }
 
@@ -87,13 +91,9 @@ h1 {
     background-color: #c82333;
 }
 
-.copy-trainer-data-btn,
-.paste-trainer-data-btn,
 #modal-cancel-btn {
     background-color: #6c757d;
 }
-.copy-trainer-data-btn:hover,
-.paste-trainer-data-btn:hover,
 #modal-cancel-btn:hover {
     background-color: #5a6268;
 }
@@ -246,6 +246,7 @@ h1 {
 
 .trainer-header .tie-error-message {
     color: orange;
+    font-size: 0.8em;
 }
 
 .trainer-actions {
@@ -317,21 +318,42 @@ input[type="text"] {
     text-align: center; /* Center the text */
 }
 
-.rank-radio-buttons input[type="radio"]:checked + label {
-    background-color: #007bff;
+.clear-rank-button {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #6c757d; /* ダークグレーに変更 */
     color: white;
-    border-color: #007bff;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: normal;
+    width: 36px; /* Set a fixed width */
+    text-align: center; /* Center the text */
+    margin-left: 5px; /* ラジオボタンとの間隔 */
+}
+
+.clear-rank-button:hover {
+    background-color: #5a6268; /* ホバー時の色も変更 */
+}
+
+.rank-radio-buttons input[type="radio"]:checked + label {
+    background-color: #28a745;
+    color: white;
+    border-color: #28a745;
+}
+
+/* 追加するスタイル */
+.rank-radio-buttons input[type="radio"]:checked + label.error-rank {
+    background-color: #dc3545; /* Red background */
+    color: white;
+    border-color: #dc3545;
 }
 
 .uma-name {
     width: 150px; /* Adjust width as needed */
 }
 
-.rank-radio-buttons label.error-rank {
-    background-color: #dc3545; /* Red background */
-    color: white;
-    border-color: #dc3545;
-}
+
 
 /* Responsive adjustments */
 @media (max-width: 1200px) {

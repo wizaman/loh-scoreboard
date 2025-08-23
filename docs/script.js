@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const group = document.createElement('div');
             group.classList.add('uma-rank-group');
             const umaNameInputId = `r${raceNum}t${trainerNum}u${i}name`;
-            group.innerHTML = `<label for="${umaNameInputId}">ウマ娘${i}:</label>`;
+            group.innerHTML = `<label for="${umaNameInputId}">${i}:</label>`;
             
             const nameInput = document.createElement('input');
             nameInput.type = 'text';
@@ -268,6 +268,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 radioLabel.textContent = rank;
                 rankContainer.appendChild(radioLabel);
             }
+
+            // クリアボタンの追加
+            const clearButton = document.createElement('button');
+            clearButton.classList.add('clear-rank-button');
+            clearButton.textContent = 'C';
+            clearButton.addEventListener('click', () => {
+                // このウマ娘のラジオボタンの選択を解除
+                group.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.checked = false;
+                });
+                performCalculationAndSave(); // スコアを再計算して保存
+            });
+            rankContainer.appendChild(clearButton); // rankContainerに追加
+
             group.appendChild(rankContainer);
             container.appendChild(group);
         }
