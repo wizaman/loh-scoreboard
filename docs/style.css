@@ -360,6 +360,16 @@ input[type="text"] {
     .race-container {
         flex-direction: column;
     }
+    .race-wrapper {
+        flex-direction: column;
+    }
+    .race-info {
+        margin-bottom: 10px; /* レース情報とレースコンテナの間にスペースを追加 */
+        flex-direction: row; /* 縦並びから横並びへ変更 */
+        align-items: center; /* 縦方向の中央揃え */
+        justify-content: center; /* 横方向の中央揃え */
+        gap: 10px; /* 要素間のスペースを調整 */
+    }
 }
 
 @media (max-width: 768px) {
