@@ -4,6 +4,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const addRaceBtn = document.getElementById('add-race-btn');
     const copyJsonBtn = document.getElementById('copy-json-btn');
     const pasteJsonBtn = document.getElementById('paste-json-btn');
+
+    // Modal Elements
+    const jsonModal = document.getElementById('json-modal');
+    const jsonInputTextarea = document.getElementById('json-input-textarea');
+    const modalPasteBtn = document.getElementById('modal-paste-btn');
+    const modalCancelBtn = document.getElementById('modal-cancel-btn');
+    const closeButton = document.querySelector('.close-button');
     const resetBtn = document.getElementById('reset-btn');
     const totalScoreContainer = document.getElementById('total-score-details-container');
 
@@ -306,14 +313,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function pasteStateFromClipboard() {
-        const jsonString = prompt('ここにJSONデータをペーストしてください:');
-        if (!jsonString) return; // User cancelled or entered empty string
+        // This function will now be triggered by the modal's paste button
+        // The prompt is replaced by the modal's textarea
+    }
+
+    // --- Modal Functions ---
+    function showModal() {
+        jsonModal.style.display = 'flex'; // Use flex to center content
+        jsonInputTextarea.value = ''; // Clear textarea on open
+        jsonInputTextarea.focus();
+    }
+
+    function hideModal() {
+        jsonModal.style.display = 'none';
+    }
+
+    function handlePasteFromModal() {
+        const jsonString = jsonInputTextarea.value;
+        if (!jsonString.trim()) {
+            alert('ペーストするJSONデータがありません。');
+            return;
+        }
 
         try {
             const parsedState = JSON.parse(jsonString);
-            // Basic validation: check if it has a 'races' array
             if (parsedState && Array.isArray(parsedState.races)) {
                 loadState(parsedState);
+                hideModal(); // Close modal on successful paste
             } else {
                 alert('無効なJSONデータです。\n期待される形式: { "races": [...] }');
             }
@@ -326,8 +352,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Initialization ---
     addRaceBtn.addEventListener('click', addRace);
     copyJsonBtn.addEventListener('click', copyStateToClipboard);
-    pasteJsonBtn.addEventListener('click', pasteStateFromClipboard);
     resetBtn.addEventListener('click', resetState);
+
+    // Event listeners for modal
+    pasteJsonBtn.addEventListener('click', showModal);
+    modalPasteBtn.addEventListener('click', handlePasteFromModal);
+    modalCancelBtn.addEventListener('click', hideModal);
+    closeButton.addEventListener('click', hideModal);
+
+    // Close modal if clicked outside content
+    window.addEventListener('click', (event) => {
+        if (event.target === jsonModal) {
+            hideModal();
+        }
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && jsonModal.style.display === 'flex') {
+            hideModal();
+        }
+    });
 
     loadStateFromLocalStorage();
 });
