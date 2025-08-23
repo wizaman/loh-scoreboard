@@ -135,14 +135,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="trainer-section" data-trainer-id="1">
                     <div class="trainer-header">
                         <input type="text" class="trainer-name-input" placeholder="トレーナー名">
-                        <p>スコア: <span class="race-score">0</span>pt<span class="tie-error-message"></span></p>
+                        <div class="score-and-error-container">
+                            <p>スコア: <span class="race-score">0</span>pt</p>
+                            <p class="tie-error-message"></p>
+                        </div>
                     </div>
                     <div class="uma-ranks-container"></div>
                 </div>
                 <div class="trainer-section" data-trainer-id="2">
                     <div class="trainer-header">
                         <input type="text" class="trainer-name-input" placeholder="トレーナー名">
-                        <p>スコア: <span class="race-score">0</span>pt<span class="tie-error-message"></span></p>
+                        <div class="score-and-error-container">
+                            <p>スコア: <span class="race-score">0</span>pt</p>
+                            <p class="tie-error-message"></p>
+                        </div>
                     </div>
                     <div class="uma-ranks-container"></div>
                 </div>

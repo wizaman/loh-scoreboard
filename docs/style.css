@@ -174,6 +174,18 @@ h1 {
     font-weight: bold;
     color: #d9534f;
     font-size: 1.2em;
+    padding-right: 15px;
+}
+
+.trainer-header .tie-error-message {
+    color: orange;
+}
+
+.score-and-error-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap */
+    align-items: baseline; /* Align items nicely */
+    gap: 5px; /* Small gap between score and error message */
 }
 
 input[type="text"] {
@@ -255,10 +267,4 @@ input[type="text"] {
         flex-direction: column;
         align-items: flex-start;
     }
-}
-
-.tie-error-message {
-    color: orange;
-    padding-left: 20px;
-    font-size: 0.8em;
 }
