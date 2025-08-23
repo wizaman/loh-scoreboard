@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="race-container">
                 <div class="trainer-section" data-trainer-id="1">
                     <div class="trainer-header">
-                        <input type="text" class="trainer-name-input" placeholder="トレーナー名">
+                        <input type="text" class="trainer-name-input" placeholder="トレーナー名" aria-label="トレーナー名">
                         <div class="score-and-error-container">
                             <p>スコア: <span class="race-score">0</span>pt</p>
                             <p class="tie-error-message"></p>
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="trainer-section" data-trainer-id="2">
                     <div class="trainer-header">
-                        <input type="text" class="trainer-name-input" placeholder="トレーナー名">
+                        <input type="text" class="trainer-name-input" placeholder="トレーナー名" aria-label="トレーナー名">
                         <div class="score-and-error-container">
                             <p>スコア: <span class="race-score">0</span>pt</p>
                             <p class="tie-error-message"></p>
@@ -164,10 +164,12 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 1; i <= 3; i++) {
             const group = document.createElement('div');
             group.classList.add('uma-rank-group');
-            group.innerHTML = `<label>ウマ娘${i}:</label>`;
+            const umaNameInputId = `r${raceNum}t${trainerNum}u${i}name`;
+            group.innerHTML = `<label for="${umaNameInputId}">ウマ娘${i}:</label>`;
             
             const nameInput = document.createElement('input');
             nameInput.type = 'text';
+            nameInput.id = umaNameInputId;
             nameInput.classList.add('uma-name');
             nameInput.placeholder = 'ウマ娘名';
             nameInput.addEventListener('input', saveState);
