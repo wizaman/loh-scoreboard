@@ -136,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         raceCounter = 0; // Reset raceCounter to re-assign numbers from 1
 
         raceWrappers.forEach((raceWrapper, index) => {
+            const oldRaceNum = raceWrapper.dataset.raceNum;
             const newRaceNum = index + 1;
             raceWrapper.dataset.raceNum = newRaceNum;
             raceWrapper.querySelector('.race-number').textContent = `${newRaceNum}R`;
@@ -151,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const umaNameInput = group.querySelector('.uma-name');
                     umaNameInput.id = `r${newRaceNum}t${trainerId}u${umaNum}name`;
                     // Update label's for attribute
-                    const umaNameLabel = group.querySelector(`label[for^="r${raceWrapper.dataset.raceNum}t${trainerId}u${umaNum}name"]`);
+                    const umaNameLabel = group.querySelector(`label[for^="r${oldRaceNum}t${trainerId}u${umaNum}name"]`);
                     if (umaNameLabel) umaNameLabel.htmlFor = umaNameInput.id;
 
                     // Update radio button IDs and names
