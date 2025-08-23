@@ -53,52 +53,6 @@ body {
     align-items: center;
 }
 
-/* Common button styles */
-#add-race-btn,
-#copy-json-btn,
-#paste-json-btn,
-#reset-btn,
-.copy-trainer-data-btn,
-.paste-trainer-data-btn,
-.clear-trainer-data-btn,
-.delete-race-btn,
-.modal-buttons button {
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-/* Button sizes and shapes */
-#add-race-btn,
-#copy-json-btn,
-#paste-json-btn,
-#reset-btn,
-.modal-buttons button {
-    padding: 10px 15px;
-    font-size: 1em;
-    border-radius: 5px;
-}
-
-.copy-trainer-data-btn,
-.paste-trainer-data-btn,
-.clear-trainer-data-btn {
-    padding: 5px 10px;
-    font-size: 0.8em;
-    border-radius: 4px;
-}
-
-.delete-race-btn {
-    border-radius: 50%; /* Make it round */
-    width: 25px;
-    height: 25px;
-    font-size: 1.2em;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 h1 {
     color: #0056b3;
 }
