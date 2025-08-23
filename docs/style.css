@@ -391,6 +391,11 @@ input[type="text"] {
         align-items: flex-start;
     }
 
+    .trainer-actions {
+        flex-direction: column; /* ボタンを縦に並べる */
+        align-items: flex-end; /* 右寄せにする */
+    }
+
     .modal-content {
         width: 95%;
     }
