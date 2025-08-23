@@ -40,7 +40,8 @@ h1 {
     gap: 10px;
 }
 
-#copy-json-btn {
+#copy-json-btn,
+#paste-json-btn {
     padding: 10px 15px;
     font-size: 1em;
     background-color: #007bff;
@@ -51,7 +52,8 @@ h1 {
     transition: background-color 0.3s;
 }
 
-#copy-json-btn:hover {
+#copy-json-btn:hover,
+#paste-json-btn:hover {
     background-color: #0056b3;
 }
 

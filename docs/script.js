@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const racesContainer = document.getElementById('races-container');
     const addRaceBtn = document.getElementById('add-race-btn');
     const copyJsonBtn = document.getElementById('copy-json-btn');
+    const pasteJsonBtn = document.getElementById('paste-json-btn');
     const resetBtn = document.getElementById('reset-btn');
     const totalScoreContainer = document.getElementById('total-score-details-container');
 
@@ -304,9 +305,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function pasteStateFromClipboard() {
+        const jsonString = prompt('ここにJSONデータをペーストしてください:');
+        if (!jsonString) return; // User cancelled or entered empty string
+
+        try {
+            const parsedState = JSON.parse(jsonString);
+            // Basic validation: check if it has a 'races' array
+            if (parsedState && Array.isArray(parsedState.races)) {
+                loadState(parsedState);
+            } else {
+                alert('無効なJSONデータです。\n期待される形式: { "races": [...] }');
+            }
+        } catch (e) {
+            console.error('Failed to parse JSON:', e);
+            alert('JSONの解析に失敗しました。入力が正しいJSON形式であることを確認してください。');
+        }
+    }
+
     // --- Initialization ---
     addRaceBtn.addEventListener('click', addRace);
     copyJsonBtn.addEventListener('click', copyStateToClipboard);
+    pasteJsonBtn.addEventListener('click', pasteStateFromClipboard);
     resetBtn.addEventListener('click', resetState);
 
     loadStateFromLocalStorage();
