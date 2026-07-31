@@ -1,4 +1,0 @@
-description="仕様を更新する"
-prompt = """
-現在の実装を確認したうえで、最新の仕様を `.gemini/GEMINI.md` に反映させてください。
-"""
