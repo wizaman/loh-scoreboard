@@ -1,6 +1,0 @@
-description="PRレビューで指摘があれば対処する"
-prompt = """
-PR #{{args}} のコメントおよびインラインレビューコメントで指摘された内容を確認し、必要に応じてコードやドキュメントを修正してください。
-レビュー確認のため、まず `gh pr view {{args}} --json title,body,comments,reviews > .gemini/temp/pr_review_{{args}}.json` コマンドでPR情報をJSONファイルに書き出し、その後 `read_file` でそのファイルを読み込んでください。
-修正が完了したら、Git操作は不要です。
-"""
